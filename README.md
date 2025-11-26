@@ -5,7 +5,7 @@
 First, run `npm install` to install all project packages
 
 ### Server
-- Run the server from `/server` with `npm start`
+- From `/server` run `npm install` and then `npm start`
 
 ### Front-end
 - Built with React, it uses open streetmaps to generate the map.  
