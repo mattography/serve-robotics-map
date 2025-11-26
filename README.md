@@ -2,10 +2,13 @@
 
 
 ## The project has two parts
-First, run `npm install` to install all project packages
 
 ### Server
-- From `/server` run `npm install` and then `npm start`
+- First, `cd` to `/server` and run `npm install` and then `npm start`
+
+### Front-end
+- Once the server is running, from the root `/`, run `npm install` to install all project packages. Then, run `npm start` to start the front-end of the project.
+
 
 ### Front-end
 - Built with React, it uses open streetmaps to generate the map.  
