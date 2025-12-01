@@ -55,7 +55,6 @@ export default function RobotMap() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ meters: 10, intervalMs: 1000 }),
     })
-    fetchRobots();
   }
 
   useEffect(() => {
