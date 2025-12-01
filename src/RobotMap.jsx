@@ -26,7 +26,6 @@ export default function RobotMap() {
         const [lat, lng] = incoming[i];
 
         const prev = robotMapRef.current.get(i);
-
         if (!prev || prev.lat !== lat || prev.lng !== lng) {
           robotMapRef.current.set(i, { lat, lng });
           hasChanges = true;
@@ -40,8 +39,9 @@ export default function RobotMap() {
 
       // If robots positions have changed, update state
       if (hasChanges) {
-        const arr = Array.from(robotMapRef.current.values()).map(r => [r.lat, r.lng]);
-        setRobots(arr);
+        const updatedRobots = incoming.map(([lat, lng]) => ({ lat, lng }));
+        setRobots(updatedRobots);
+        robotMapRef.current = new Map(updatedRobots.map((robot, index) => [index, robot]));
       }
 
     } catch (err) {
@@ -57,6 +57,23 @@ export default function RobotMap() {
     })
   }
 
+  async function stopAuto() {
+    await fetch("http://localhost:4000/start-auto", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    })
+  }
+
+  async function resetBots() {
+    const resetCount = document.getElementById("reset-count").value;
+    fetch("http://localhost:4000/reset", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ count: resetCount }),
+    });
+    stopAuto()
+  }
+
   useEffect(() => {
     startAuto();
     fetchRobots();
@@ -69,7 +86,10 @@ export default function RobotMap() {
   return (
     <MapContainer center={center} zoom={14} style={{ width: "100vw", height: "100vh" }}>
         <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
+        <div style={{position: 'absolute', right: '10px', top: '10px', zIndex: 1000, backgroundColor: "#ddd"}}>
+          <input type="text" id="reset-count"/>
+          <button onClick={() => resetBots()}>Reset</button>
+        </div>
         {robots.map((pos, i) => {
             const { lat, lng } = { lat: pos[0], lng: pos[1] };
             return (
